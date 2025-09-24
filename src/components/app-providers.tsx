@@ -12,18 +12,18 @@ export function AppProviders({ children }: Readonly<{ children: React.ReactNode 
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         <PrivyProvider
           appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID!}
-          clientId={process.env.NEXT_PUBLIC_PRIVY_CLIENT_ID!}
           config={{
-            embeddedWallets: {
-              ethereum: {
-                createOnLogin: "users-without-wallets",
-              },
-              solana: {
-                createOnLogin: "users-without-wallets",
-              },
+            appearance: {
+              theme: 'dark',
+              accentColor: '#6366f1',
             },
-            appearance: { walletChainType: "ethereum-and-solana" },
-            externalWallets: { solana: { connectors: toSolanaWalletConnectors() } },
+            embeddedWallets: {
+              ethereum: { createOnLogin: 'users-without-wallets' },
+              solana: { createOnLogin: 'users-without-wallets' },
+            },
+            externalWallets: {
+              solana: { connectors: toSolanaWalletConnectors() },
+            },
           }}
         >
           {children}
