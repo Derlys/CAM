@@ -1,7 +1,10 @@
+'use client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowRight, BookOpen, CookingPot, Droplets, LucideWallet, MessageCircleQuestion } from 'lucide-react'
 import React from 'react'
 import { AppHero } from '@/components/app-hero'
+import { FullScreenLoader } from '@/components/ui/fullscreen-loader'
+import { usePrivy } from '@privy-io/react-auth'
 
 const primary: {
   label: string
@@ -44,11 +47,12 @@ const secondary: {
     icon: <LucideWallet className="w-5 h-5 text-blue-400" />,
   },
 ]
-
 export default function DashboardFeature() {
   return (
     <div>
+
       <AppHero title="gm" subtitle="Say hi to your new Solana app." />
+
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {primary.map((link) => (
@@ -96,6 +100,7 @@ export default function DashboardFeature() {
           </Card>
         </div>
       </div>
+
     </div>
   )
 }

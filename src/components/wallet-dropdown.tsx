@@ -7,72 +7,65 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import * as React from 'react'
-import { ellipsify, UiWallet, useWalletUi, useWalletUiWallet } from '@wallet-ui/react'
 import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { cn } from '@/lib/utils'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { usePrivy, useWallets } from '@privy-io/react-auth'
 
-function WalletAvatar({ className, wallet }: { className?: string; wallet: UiWallet }) {
+function WalletAvatar({ address }: { address: string }) {
   return (
-    <Avatar className={cn('rounded-md h-6 w-6', className)}>
-      <AvatarImage src={wallet.icon} alt={wallet.name} />
-      <AvatarFallback>{wallet.name[0]}</AvatarFallback>
+    <Avatar className="rounded-md h-6 w-6">
+      <AvatarFallback>{address.slice(2, 4).toUpperCase()}</AvatarFallback>
     </Avatar>
   )
 }
 
-function WalletDropdownItem({ wallet }: { wallet: UiWallet }) {
-  const { connect } = useWalletUiWallet({ wallet })
+export function WalletDropdown() {
+  const { ready, authenticated, login, logout, user } = usePrivy()
+  const { wallets } = useWallets()
+  console.log("Privy detected wallets:", wallets)
 
-  return (
-    <DropdownMenuItem
-      className="cursor-pointer"
-      key={wallet.name}
-      onClick={() => {
-        return connect()
-      }}
-    >
-      {wallet.icon ? <WalletAvatar wallet={wallet} /> : null}
-      {wallet.name}
-    </DropdownMenuItem>
-  )
-}
+  if (!ready) return null
 
-function WalletDropdown() {
-  const { account, connected, copy, disconnect, wallet, wallets } = useWalletUi()
+  const primaryWallet = wallets[0]
+  const address = primaryWallet?.address
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="cursor-pointer">
-          {wallet?.icon ? <WalletAvatar wallet={wallet} /> : null}
-          {connected ? (account ? ellipsify(account.address) : wallet?.name) : 'Select Wallet'}
+          {authenticated && address ? (
+            <>
+              <WalletAvatar address={address} />
+              {address.slice(0, 4)}...{address.slice(-4)}
+            </>
+          ) : (
+            'Connect Wallet'
+          )}
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent>
-        {account ? (
+        {authenticated && address ? (
           <>
-            <DropdownMenuItem className="cursor-pointer" onClick={copy}>
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => navigator.clipboard.writeText(address)}
+            >
               Copy address
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer" onClick={disconnect}>
+            <DropdownMenuItem className="cursor-pointer" onClick={logout}>
               Disconnect
             </DropdownMenuItem>
             <DropdownMenuSeparator />
           </>
         ) : null}
-        {wallets.length ? (
-          wallets.map((wallet) => <WalletDropdownItem key={wallet.name} wallet={wallet} />)
-        ) : (
-          <DropdownMenuItem className="cursor-pointer" asChild>
-            <a href="https://solana.com/solana-wallets" target="_blank" rel="noopener noreferrer">
-              Get a Solana wallet to connect.
-            </a>
+
+        {!authenticated ? (
+          <DropdownMenuItem className="cursor-pointer" onClick={login}>
+            Login with Privy
           </DropdownMenuItem>
-        )}
+        ) : null}
       </DropdownMenuContent>
     </DropdownMenu>
   )
 }
-
-export { WalletDropdown }

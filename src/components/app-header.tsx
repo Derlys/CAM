@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button'
 import { Menu, X } from 'lucide-react'
 import { ThemeSelect } from '@/components/theme-select'
 import { WalletDropdown } from '@/components/wallet-dropdown'
-import { ClusterDropdown } from '@/components/cluster-dropdown'
 
 export function AppHeader({ links = [] }: { links: { label: string; path: string }[] }) {
   const pathname = usePathname()
@@ -45,7 +44,6 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
 
         <div className="hidden md:flex items-center gap-4">
           <WalletDropdown />
-          <ClusterDropdown />
           <ThemeSelect />
         </div>
 
@@ -54,7 +52,6 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
             <div className="flex flex-col p-4 gap-4 border-t dark:border-neutral-800">
               <div className="flex justify-end items-center gap-4">
                 <WalletDropdown />
-                <ClusterDropdown />
                 <ThemeSelect />
               </div>
               <ul className="flex flex-col gap-4">

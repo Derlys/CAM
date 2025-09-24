@@ -2,14 +2,32 @@
 
 import { ThemeProvider } from '@/components/theme-provider'
 import { ReactQueryProvider } from './react-query-provider'
-import { SolanaProvider } from '@/components/solana/solana-provider'
 import React from 'react'
+import { PrivyProvider } from '@privy-io/react-auth'
+import { toSolanaWalletConnectors } from '@privy-io/react-auth/solana'
 
 export function AppProviders({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ReactQueryProvider>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-        <SolanaProvider>{children}</SolanaProvider>
+        <PrivyProvider
+          appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID!}
+          config={{
+            appearance: {
+              theme: 'dark',
+              accentColor: '#6366f1',
+            },
+            embeddedWallets: {
+              ethereum: { createOnLogin: 'users-without-wallets' },
+              solana: { createOnLogin: 'users-without-wallets' },
+            },
+            externalWallets: {
+              solana: { connectors: toSolanaWalletConnectors() },
+            },
+          }}
+        >
+          {children}
+        </PrivyProvider>
       </ThemeProvider>
     </ReactQueryProvider>
   )
