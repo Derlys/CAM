@@ -22,6 +22,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
+    "@prisma/client": "6.16.2",
     "@privy-io/react-auth": "^3.0.1",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-dialog": "^1.1.15",
@@ -59,12 +60,13 @@
     "eslint": "^9.35.0",
     "eslint-config-next": "15.5.3",
     "prettier": "^3.6.2",
+    "prisma": "^6.16.2",
     "tailwindcss": "^4.1.13",
+    "tsx": "^4.20.5",
     "typescript": "^5.9.2",
     "ws": "^8.18.3"
   },
   "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39",
-
   "pnpm": {
     "overrides": {
       "react": "^19.1.1",

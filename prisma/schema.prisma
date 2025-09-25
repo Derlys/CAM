@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessionsAsMentor Session[]       @relation("MentorSessions")
+  sessionsAsMentee Session[]       @relation("MenteeSessions")
+  availability     Availability[]
+  expertise        UserExpertise[]
+}
+
+model Expertise {
+  id    String          @id @default(cuid())
+  name  String          @unique
+  users UserExpertise[]
+}
+
+model UserExpertise {
+  userId      String
+  expertiseId String
+  user        User      @relation(fields: [userId], references: [id])
+  expertise   Expertise @relation(fields: [expertiseId], references: [id])
+
+  @@id([userId, expertiseId])
+}
+
+model Availability {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  dayOfWeek Int
+  startTime DateTime
+  endTime   DateTime
+}
+
+model Session {
+  id          String        @id @default(cuid())
+  mentor      User          @relation("MentorSessions", fields: [mentorId], references: [id])
+  mentorId    String
+  mentee      User          @relation("MenteeSessions", fields: [menteeId], references: [id])
+  menteeId    String
+  scheduledAt DateTime
+  duration    Int
+  status      SessionStatus @default(PENDING)
+}
+
+enum SessionStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
