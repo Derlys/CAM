@@ -1,5 +1,5 @@
 import DashboardFeature from '@/features/dashboard/dashboard-feature'
 
-export default function Home() {
+export default function DashboardPage() {
   return <DashboardFeature />
 }

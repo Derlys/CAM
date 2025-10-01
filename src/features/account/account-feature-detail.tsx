@@ -9,7 +9,6 @@ import { AccountUiBalance } from '@/features/account/ui/account-ui-balance'
 import { AppExplorerLink } from '@/components/app-explorer-link'
 import { AccountUiButtons } from '@/features/account/ui/account-ui-buttons'
 import { AccountUiTokens } from '@/features/account/ui/account-ui-tokens'
-
 export default function AccountFeatureDetail() {
   const params = useParams()
   const address = useMemo(() => {
